@@ -1,0 +1,467 @@
+%
+% Z podziękowaniem dla p.Jarka – największego specjalisty od TeXa
+% na wszystkich kontynentach z wykluczeniem tego,
+% na którym mieszka Donald Knuth
+
+%
+% Wersja z groszami w cenie netto (trzeba podawać cenę w groszach)
+%
+
+\nopagenumbers
+\vsize11in
+\voffset-1cm
+
+% fonty
+%\font\ss=phvro8tn at 6pt
+%\font\sm=phvr8tn at 8pt
+%\font\sn=phvr8tn at 10pt
+%\font\sf=phvr8t at 10pt
+%\font\Sf=phvr8t scaled \magstep1
+%\font\SF=phvr8t scaled \magstep2
+
+%\font\ss="Roboto Condensed/I" at 5.5pt
+%\font\sm="Roboto Condensed:style=Regular" at 8pt
+%\font\sn="Roboto Condensed:style=Regular" at 9.2pt
+%\font\sf="Roboto Condensed:style=Regular" at 10pt
+%\font\Sf="Roboto Condensed:style=Regular" scaled \magstep1
+%\font\SF="Roboto Condensed:style=Regular" scaled \magstep2
+
+\font\ss="Nimbus Sans L Regular/I" at 6pt
+\font\sm="Nimbus Sans L Regular:extend=0.82" at 8pt
+\font\sn="Nimbus Sans L Regular:extend=0.82" at 10pt
+\font\sf="Nimbus Sans L Regular:extend=0.82" at 10pt
+\font\Sf="Nimbus Sans L Regular:extend=0.82" scaled \magstep1
+\font\SF="Nimbus Sans L Regular:extend=0.82" scaled \magstep2
+
+%\font\ss="[lmsans8-oblique]" at 6pt
+%\font\sm="[lmsans8-regular]" at 8pt
+%\font\sn="[lmsans8-regular]" at 10pt
+%\font\sf="[lmsans8-regular]" at 10pt
+%\font\Sf="Latin Modern Roman/S=10" scaled \magstep1
+%\font\SF="Latin Modern Roman/S=10" scaled \magstep2
+
+% ########### Nagłówek (Sprzedawca/Odbiorca/Daty)
+% 
+% Elementy nagówka
+%
+\newdimen\H \H=2.5cm
+\newdimen\G \G\H \advance\G by 6pt
+\def\frSprzedawca {\pudloD 5.2cm {\H} Sprzedawca: {\sn\MojaFirma}}
+\def\frNabywca    {\pudloD 7.3cm {\H} Nabywca:    {\sn\dlakogo}}
+\def\frDaty	  {\vbox to \G {
+		    \pudloA 3cm .6cm {Miejscowość:} {\sn \miejscowosc}\vfil
+		    \pudloA 3cm .6cm {Data wystawienia faktury:} {\sn \the\day\ \mies\ \the\year}\vfil
+		    \pudloA 3cm .6cm {Data sprzedaży:} {\sn \the\day\ \mies\ \the\year}}}
+%
+% Pierwsza ramka
+%
+\def\fvatHead#1 { % wołane z parametrem 'Oryginał' albo 'Kopia'
+\line{\frSprzedawca\hfil\frNabywca\hfil\frDaty\break}
+\vskip 3pt
+\hrule\hbox{\vrule\vbox{\vskip7pt
+\line{\SF\hfill Faktura VAT Nr \nrfaktury\hfill}
+\vskip2pt
+\line{\sf\hfill #1 \hfill}
+\vskip3pt}\vrule}\hrule
+} %end of fvatHead
+
+
+%
+% %%%%%%%%%%%%%%% Pozycje faktury
+%
+% Szerokość dwóch ostatnich kolumn tabeli
+\newdimen\R \R=60pt
+\newdimen\dwaR \dwaR=120pt
+\newdimen\trzyR \trzyR=180pt
+
+%
+% Elementy tabelek sprzedaży towarów
+%
+\def\strut{\vrule height 12pt depth 6pt width 0pt}
+\def\vf#1{\kern3pt\sf\strut #1\hfill}
+%\def\vf#1{\kern3pt\sf\strut\vbox{\hsize5cm\parindent0pt \vss#1\vss}\hfill}
+\def\vl#1#2{\hbox to #1{\strut\kern3pt#2\hfill\kern3pt}}
+\def\vc#1#2{\hbox to #1{\strut\kern3pt\hfill#2\hfill\kern3pt}}
+\def\vr#1#2{\hbox to #1{\strut\kern3pt\hfill#2\kern3pt}}
+
+\def\LongTowarName#1{\vbox{\hsize 9cm \vskip 2mm \noindent #1}}
+
+%
+% Nagłówek tabeli sprzedaży towarów
+%
+\def\tableHead{\sf
+\vskip3pt
+\nettoA=0
+\nettoB=0
+\nettoZ=0
+\Lp=0
+\hrule
+\line{\vrule
+\vc{7mm}{\sm Lp.}\vrule
+\vf{\sm Nazwa towaru lub usługi}\vrule
+\vc{24pt}{\sm Ilość}\vrule
+\vc{24pt}{\sm j.m.}\vrule
+\vc{13pt}{\ss \%}\vrule
+\vc{\R}{\sm Cena}\vrule
+\vc{\R}{\sm Wartość netto}\vrule
+}\hrule}
+
+%
+% Kolejne linie z towarem
+%
+\def\liniaTowaru#1#2#3#4#5{%
+\advance\Lp 1
+\line{\vrule
+\vr{7mm}{\the\Lp.}\vrule	% Lp.
+\vf{\LongTowarName{#1}}\vrule			% Nazwa
+\vr{24pt}{#2}\vrule		% Ilość
+\vc{24pt}{\sm #4}\vrule	% j.m
+\vc{13pt}{\ss #5}\vrule		% stawka
+\vr{\R}{\PLN{\cena}}\vrule	% Cena
+\vr{\R}{\PLN{\aIxC}}\vrule	% Wartość netto
+}\hrule}
+
+%
+% Towary 23%
+%
+\def\artA#1 | #2 | #3 | #4 {
+\cena=#3 \advance\cena by 0
+\aIxC\cena \multiply\aIxC by #2
+\advance\nettoA\aIxC
+\liniaTowaru{#1}{#2}{#3}{#4}{23}
+}
+%
+% Towary 8%
+%
+\def\artB#1 | #2 | #3 | #4 {
+\cena=#3 \advance\cena by 0
+\aIxC\cena \multiply\aIxC by #2
+\advance\nettoB\aIxC
+\liniaTowaru{#1}{#2}{#3}{#4}{8}
+}
+
+%
+% Towary zw. (zwolnione z VAT)
+%
+\def\artZ#1 | #2 | #3 | #4 {\advance\Lp 1
+\cena=#3 %\multiply\cena by 100
+\advance\cena by 0
+\aIxC\cena \multiply\aIxC by #2
+\advance\nettoZ\aIxC
+\liniaTowaru{#1}{#2}{#3}{#4}{zw.}
+}
+
+
+%
+% Cały dół ze słownie i takie tam dla jednej stawki
+%
+\def\sumaJednaStawka#1{
+\line{\vbox{\hsize 121mm%\hrule - jak się chce zobaczyć szerokość tej skrzynki
+\noindent\Sf Do zapłaty: {\SF\PLN{\sumaBrutto}}
+\vskip2mm
+\noindent{\sf Słownie: \slownieZlGr}
+\vskip2mm
+\vfil
+\ifbank{\vbox{\noindent\Sf Płatne przelewem w terminie \dni\ dni na konto:\par\noindent\konto}}%
+\else{\noindent\Sf Zapłacono gotówką}\fi\vfil}
+\hfil\vrule\vbox{\hrule%
+\hbox{\vc{\dwaR}{RAZEM}}\hrule
+\hbox{\vl{\R}{Netto}\vrule\vr{\R}{\PLN{\sumaNetto}}}\hrule
+\hbox{\vl{\R}{VAT #1\%}\vrule\vr{\R}{\PLN{\sumaVat}}}\hrule
+\hbox{\vl{\R}{Brutto}\vrule\vr{\R}{\PLN{\sumaBrutto}}}\hrule}\vrule}\vrule
+}
+
+
+%
+% Cały dół ze słownie i takie tam dla stawek 8 i 23
+%
+\def\sumaRozbiteStawki{
+\line{\vbox{\hsize 76mm%
+\noindent\Sf Do zapłaty: {\SF\PLN{\sumaBrutto}}
+\vskip2mm
+%\hsize 76mm
+\noindent{\sf Słownie: \slownieZlGr}
+\vskip5mm
+\vfil
+\noindent%
+\ifbank{\vbox{\noindent\sf Płatne przelewem w terminie \dni\ dni na konto:}}%
+\else{\noindent Zapłacono gotówką}\fi
+\vfil}
+\hfil\vrule\vbox{\hrule%
+\hbox{\vr{\R}{\sn Stawka VAT}\vrule\vr{\R}{Netto}\vrule\vr{\R}{VAT}\vrule\vr{\R}{Brutto}}\hrule
+\ifnum0<\nettoA \hbox{\vr{\R}{23\%}\vrule\vr{\R}{\PLN{\nettoA}}\vrule\vr{\R}{\PLN{\vatA}}\vrule\vr{\R}{\PLN{\bruttoA}}}\hrule\fi
+\ifnum0<\nettoB \hbox{\vr{\R}{ 8\%}\vrule\vr{\R}{\PLN{\nettoB}}\vrule\vr{\R}{\PLN{\vatB}}\vrule\vr{\R}{\PLN{\bruttoB}}}\hrule\fi
+\ifnum0<\nettoZ \hbox{\vr{\R}{zw. }\vrule\vr{\R}{\PLN{\nettoZ}}\vrule\vr{\R}{\PLN{    0}}\vrule\vr{\R}{\PLN{\nettoZ }}}\hrule\fi
+\vskip1pt\hrule
+\hbox{\vl{\R}{Razem}\vrule\vr{\R}{\PLN{\sumaNetto}}\vrule\vr{\R}{\PLN{\sumaVat}}\vrule\vr{\R}{\PLN{\sumaBrutto}}}\hrule}\vrule}
+%
+\line{\vbox{\hsize 10in
+\vfil
+\Sf\vbox{\noindent\ifbank{\vbox{\noindent \konto}}\fi}}}
+}
+
+
+% %%%%%%%%%%%%%%%%%%%%%%%%%%%% Podsumowanie 
+\def\fvatFoot{
+\vskip3pt
+%
+% Obliczamy sumy końcowe
+%
+% bruttoA = 1.23 * nettoA
+\bruttoA\nettoA \multiply\bruttoA 123 \advance\bruttoA50 \divide\bruttoA100
+% vatA = bruttoA - nettoA
+\vatA\bruttoA \advance\vatA-\nettoA
+% bruttoB = 1.08 * nettoB
+\bruttoB\nettoB \multiply\bruttoB 108 \advance\bruttoB50 \divide\bruttoB100
+% vatB = bruttoB - nettoB
+\vatB\bruttoB \advance\vatB-\nettoB
+% sumaNetto = nettoA + nettoB + nettoZ
+\sumaNetto\nettoA \advance\sumaNetto by \nettoB \advance\sumaNetto\nettoZ
+% sumaVat = vatA + vatB
+\sumaVat\vatA \advance\sumaVat by \vatB
+% sumaBrutto = sumaNetto + sumaVat
+\sumaBrutto\sumaNetto \advance\sumaBrutto by \sumaVat
+%\zl i \gr To jest do napisania "słownie"
+\zl=\sumaBrutto \divide\zl by 100 \gr=\sumaBrutto
+\zlgr=\zl \multiply\zlgr by 100%
+\advance\gr by -\zlgr
+
+\tolerance=10000% Jakby się słownie miało nieprzenosić czy co tam
+\ifnum\sumaNetto=\nettoA
+    \sumaJednaStawka{23}
+\else
+    \ifnum\sumaNetto=\nettoB
+        \sumaJednaStawka{8}
+    \else
+        \sumaRozbiteStawki
+    \fi
+\fi
+\vskip3mm\fvPodpisy%
+}
+
+%
+% podpisy pod fakturą
+%
+
+\def\fvPodpisy{
+\line{%
+\pudloD 7cm 1.5cm {Osoba upoważniona do odbioru faktury VAT:} {\sm \klient}%
+\hfill%
+\pudloD 7cm 1.5cm {Osoba upoważniona do wystawienia faktury VAT:} {\sm \wystawil}%
+}}
+
+
+%
+% Używane liczniki
+%
+\newcount\Lp
+\newcount\cena
+\newcount\aIxC
+
+\newcount\nettoA
+\newcount\nettoB
+\newcount\nettoZ
+
+\newcount\vatA
+\newcount\vatB
+
+\newcount\bruttoA
+\newcount\bruttoB
+
+\newcount\sumaNetto
+\newcount\sumaVat
+\newcount\sumaBrutto
+
+%%%%%%%%%%%%%%%% Takie tam różne moje definicje %%%%%%%%%%%%%%%%%%%%
+\def\KilkaLinii#1{\def\\{\par}\parindent0pt#1}
+
+%%%%%%%%%%%%%%%%
+\def\MojaFirma{} \def\sprzedawca#1\par{\def\MojaFirma{\KilkaLinii#1}}
+\def\dlakogo{}   \def\dla#1\par{\gdef\dlakogo{\def\\{\par}\parindent0pt#1}}
+\def\nrfaktury{} \def\faktura#1 {\gdef\nrfaktury{#1}}
+\def\klient{} \def\kto#1\par{\gdef\klient{#1}}
+\def\wystawil{} \def\mojpodpis#1\par{\gdef\wystawil{#1}}
+\def\miejscowosc{} \def\gdzie#1\par{\gdef\miejscowosc{#1}}
+\def\dnia#1.#2.#3 {\year#1 \month#2 \day#3 \ifnum\year<100\advance\year2000\fi}
+\newif\ifbank \bankfalse
+\def\bank#1 {\banktrue\gdef\dni{#1}}
+\def\banknot{\bankfalse}
+
+\def\mies{\ifcase\month\or
+stycznia\or lutego\or marca\or kwietnia\or maja\or czerwca\or lipca\or
+sierpnia\or września\or października\or listopada\or grudnia\fi}
+
+% Różne pudła
+\def\boxit#1{\vbox{\hrule\hbox{\vrule\kern3pt\vbox{\kern3pt #1\kern3pt}\kern3pt\vrule}\hrule}}
+
+\def\pudloA#1 #2 #3 #4{\boxit{\vbox to #2 {\hsize #1
+\noindent
+\leftskip0pt \rightskip0pt plus 1fill
+\ss #3\vss
+\leftskip0pt plus 1fill \rightskip0pt
+\noindent{#4}
+\vss}}}
+
+\def\pudloD#1 #2 #3 #4{\boxit{\vbox to #2 {\hsize #1
+\noindent
+\leftskip0pt \rightskip0pt plus 1fill
+\ss #3\vss
+\leftskip0pt plus 1fill \rightskip0pt plus 1fill
+\noindent{#4}
+\vss}}}
+
+% Różne makra używane do pisania pozycji
+\newcount\zl
+\newcount\gr
+\newcount\zlgr
+
+\def\PLN#1{{\zl=#1 \gr=\zl
+\divide\zl by 100 \the\zl,%
+\zlgr=\zl \multiply\zlgr by 100%
+\advance\gr by -\zlgr
+\ifnum10>\gr 0\fi\the\gr\ zł}}
+                                        
+% %%%%%%%%%%%%%%% Makra piszące liczbę słownie
+\def\Ni#1{\ifcase#1\or
+jeden    \or dwa      \or trzy     \or cztery   \or pięć     \or
+sześć    \or siedem   \or osiem    \or dziewięć \or dziesięć \or
+jedenaście \or dwanaście    \or trzynaście \or czternaście \or piętnaście \or 
+szesnaście \or siedemnaście \or osiemnaście \or dziewiętnaście \fi}
+ 
+\def\Nii#1{\ifcase#1\or
+dziesięć \or dwadzieścia \or trzydzieści \or czterdzieści \or pięćdziesiąt \or
+sześćdziesiąt \or siedemdziesiąt \or osiemdziesiąt \or dziewięćdziesiąt \fi}
+ 
+\def\Niii#1{\ifcase#1\or
+sto \or dwieście \or trzysta \or czterysta \or pięćset 
+\or sześćset \or siedemset \or osiemset \or dziewięćset \fi}
+ 
+\def\Ntys#1{\ifcase\count12\or
+tysiąc \or
+tysiące \or
+tysiące \or
+tysiące \else
+tysięcy \fi}
+
+\def\SS#1{{\count0=#1%
+\count3=\count0 
+          \divide\count3 by 100
+          \count13\count3
+          \multiply\count3 by 100
+\count2=\count0 
+          \advance\count2 by -\count3
+          \divide\count2 by 10
+          \count12\count2
+          \multiply\count2 by 10
+\count1=\count0 
+          \advance\count1 by -\count2
+          \advance\count1 by -\count3
+\ifnum1=\count12 \count12=0 \advance\count1 by 10 \fi
+\Niii{\count13}%
+\Nii{\count12}%
+\Ni{\count1}%
+}}
+ 
+\def\slownie#1{{\count0=#1%
+\count3=\count0
+          \divide\count3 by 1000000
+          \count13\count3
+          \multiply\count3 by 1000000
+\count2=\count0
+          \advance\count2 by -\count3
+          \divide\count2 by 1000
+          \count12\count2
+          \multiply\count2 by 1000
+\count1=\count0
+          \advance\count1 by -\count2
+          \advance\count1 by -\count3
+          \count11\count1
+\ifnum\count13>0 \SS{\count13}mln. \fi
+\ifnum\count12>0 \SS{\count12}\Ntys \fi
+\SS{\count11}%
+}}
+
+\def\Nzl#1{{%
+\count0=#1
+\count1=\count0
+\divide\count1 by 100
+\multiply\count1 by 100
+\advance\count0 by -\count1
+\ifcase\count0
+złotych\or	% 0
+złotych\or	% 1
+złote\or	% 2
+złote\or	% 3
+złote\else	% 4
+\ifnum\count0<22
+złotych
+\else
+{\count0=#1
+\count1=\count0
+\divide\count1 by 10
+\multiply\count1 by 10
+\advance\count0 by -\count1
+\ifcase\count0
+złotych\or	% x0
+złotych\else	% x1
+\Nzl{\count0}
+\fi
+}
+\fi
+\fi
+}}
+
+\def\Ngr#1{{\count0=#1
+\count1=\count0
+\divide\count1 by 100
+\multiply\count1 by 100
+\advance\count0 by -\count1
+\ifcase\count0
+groszy\or	% 0
+grosz\or	% 1
+grosze\or	% 2
+grosze\or	% 3
+grosze\else	% 4
+\ifnum\count0<22
+groszy
+\else
+{\count0=#1
+\count1=\count0
+\divide\count1 by 10
+\multiply\count1 by 10
+\advance\count0 by -\count1
+\ifcase\count0
+groszy\or	% x0
+groszy\else	% x1
+\Ngr{\count0}
+\fi
+}
+\fi
+\fi
+}}
+
+
+\def\slownieZlGr{%
+\slownie{\the\zl}\Nzl{\the\zl} \ifnum\gr>0 \slownie{\the\gr}\Ngr{\the\gr}\fi
+}
+
+%\let\END\end
+
+\newbox\OUT
+
+\def\towar#1\par{\setbox\OUT\vbox{\tableHead#1\fvatFoot}}
+
+\def\Fakturuj{%
+\vbox{\fvatHead Oryginał \copy\OUT}\vfill%\eject
+%\vbox{\fvatHead Kopia \copy\OUT}\vfil\line{}\vskip 20pt\eject%
+\vbox{\fvatHead Kopia \copy\OUT}\vfill\eject%
+% Zerowanie po wystawieniu
+}
+
+\def\FakturujO{%
+\vbox{\fvatHead Oryginał \copy\OUT}\vfill
+}
+
+\def\FakturujK{%
+\vbox{\fvatHead Kopia \copy\OUT}\vfill
+}

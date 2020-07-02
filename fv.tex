@@ -1,0 +1,36 @@
+%
+\input z.inc.core.tex
+\input z.inc.user.tex
+
+% Numer faktury
+\faktura {123\thinspace{}/\thinspace{}456\thinspace{}/\thinspace{}2020}
+
+% Data faktury (bieżąca data jeśli zakomentowane)
+\dnia 2020.06.24
+
+% Dane firmy
+\dla Firma\\Spółka z o. o.\\Adres firmy\\NIP:8740343231
+
+% Podpis osoby odbierającej fakturę (można zakomentować)
+\kto Nazwisko Prezesa
+
+% sposób zapłaty
+%    * gotówka (domyślne): \banknot
+%    * przelew: \bank ile_dni_na zapłatę
+\bank 10
+
+% Pozycje faktury:
+% \art[ABZ] nazwa | ile | cena w groszach | jednostka miary
+
+\towar
+\artA Za exploita, który nie działa | 12 | 10000 | szt.
+\artB Manualne zaszyfrowanie dysku  | 2  | 25000 | szt.
+%\artZ Wywóz komputera na elektrozłom | 13 | 1520 | km
+
+
+\Fakturuj
+
+\bye
+
+% No i teraz `xetex fv.tex`
+
