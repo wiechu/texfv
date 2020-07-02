@@ -19,19 +19,21 @@
 %\font\Sf=phvr8t scaled \magstep1
 %\font\SF=phvr8t scaled \magstep2
 
+\def\Font{Nimbus Sans Narrow}
+
+\font\ss="\Font/I" at 6pt
+\font\sm="\Font:extend=0.82" at 8pt
+\font\sn="\Font:extend=0.82" at 10pt
+\font\sf="\Font:extend=0.82" at 10pt
+\font\Sf="\Font:extend=0.82" scaled \magstep1
+\font\SF="\Font:extend=0.82" scaled \magstep2
+
 %\font\ss="Roboto Condensed/I" at 5.5pt
 %\font\sm="Roboto Condensed:style=Regular" at 8pt
 %\font\sn="Roboto Condensed:style=Regular" at 9.2pt
 %\font\sf="Roboto Condensed:style=Regular" at 10pt
 %\font\Sf="Roboto Condensed:style=Regular" scaled \magstep1
 %\font\SF="Roboto Condensed:style=Regular" scaled \magstep2
-
-\font\ss="Nimbus Sans L Regular/I" at 6pt
-\font\sm="Nimbus Sans L Regular:extend=0.82" at 8pt
-\font\sn="Nimbus Sans L Regular:extend=0.82" at 10pt
-\font\sf="Nimbus Sans L Regular:extend=0.82" at 10pt
-\font\Sf="Nimbus Sans L Regular:extend=0.82" scaled \magstep1
-\font\SF="Nimbus Sans L Regular:extend=0.82" scaled \magstep2
 
 %\font\ss="[lmsans8-oblique]" at 6pt
 %\font\sm="[lmsans8-regular]" at 8pt
@@ -143,7 +145,7 @@
 %
 % Towary zw. (zwolnione z VAT)
 %
-\def\artZ#1 | #2 | #3 | #4 {\advance\Lp 1
+\def\artZ#1 | #2 | #3 | #4 {
 \cena=#3 %\multiply\cena by 100
 \advance\cena by 0
 \aIxC\cena \multiply\aIxC by #2
